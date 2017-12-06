@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>Plaques</title>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.0/markdown-it.js"></script>
+
+<body>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Aberdeen City Plaques</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+<select id="select"></select>
+<img class="thumbnail" style="float:right" src="#">
+<h1 id="name"></h1>
+<dl>
+<dt>Area</dt>
+<dd id="area"></dd>
+<dt>Location</dt>
+<dd id="location"></dd>
+<dt>Type</dt>
+<dd id="type"></dd>
+</dl>
+
+<div id="about">
+</div>
+
+</div><!-- container -->
+
+<script type="text/javascript">
+
+var ps;
+var md = window.markdownit();
+
+var drawPage = function() {
+  pid = $("#select").val() || 0;
+  $("#name").html(ps[pid]['name']);
+  $("#area").html(ps[pid]['area']);
+  $("#location").html(ps[pid]['location']);
+  $("#type").html(ps[pid]['type']);
+  $("#about").html(md.render(ps[pid]['about']));
+  $("img").attr("src", "images/" + ps[pid]['image']);
+};
+
+$.getJSON("data.json", function(data){
+  ps = data['plaques'];
+  $.each(ps, function (i, item) {
+    $('#select').append($('<option>', { 
+        value: i,
+        text : item.name 
+    }));
+  });
+  drawPage();
+});
+
+
+$("#select").bind('change', function(){
+  drawPage();
+});
+
+</script>
+
+</body>
+</html>
+
